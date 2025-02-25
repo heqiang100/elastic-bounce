@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Elastic Bounce 动态元素示例</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      position: fixed;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .page-container {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #f5f6fa;
+    }
+
+    header {
+      height: 44px;
+      background: #3498db;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    .controls {
+      padding: 8px 10px;
+      background: #ecf0f1;
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #ddd;
+    }
+
+    button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      background: #2ecc71;
+      color: white;
+      cursor: pointer;
+      font-size: 13px;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    button:active {
+      background: #27ae60;
+    }
+
+    .content {
+      flex: 1;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+      min-width: 0;
+    }
+
+    .column h2 {
+      font-size: 16px;
+      margin: 0;
+      padding: 0 5px;
+    }
+
+    .scroll-container {
+      flex: 1;
+      background: #fff;
+      border-radius: 8px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      min-height: 0;
+      padding: 1px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* 内部滚动容器样式 */
+    .inner-scroll {
+      height: 180px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 10px;
+      border: 1px solid #e1e8ed;
+    }
+
+    .inner-content {
+      padding: 8px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 10px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .card h3 {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .card p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* 内部卡片样式 */
+    .inner-card {
+      background: #fff;
+      border-radius: 4px;
+      padding: 12px;
+      margin: 8px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .inner-card h4 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .inner-card p {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .inner-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    footer {
+      height: 40px;
+      background: #2c3e50;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <header>
+      <h1>动态元素示例</h1>
+    </header>
+
+    <div class="controls">
+      <button onclick="addContainer()">添加容器</button>
+      <button onclick="removeContainer()">移除容器</button>
+      <button onclick="addCard()">添加卡片</button>
+      <button onclick="addInnerCard()">添加内部卡片</button>
+      <button onclick="toggleElastic()">切换弹性</button>
+    </div>
+
+    <div class="content">
+      <div class="column" id="dynamic-column">
+        <h2>动态容器</h2>
+      </div>
+    </div>
+
+    <footer>
+      <p>Elastic Bounce &copy; 2024</p>
+    </footer>
+  </div>
+
+  <script src="../dist/elastic-bounce.umd.min.js"></script>
+  <script>
+    // 初始化弹性滚动
+    ElasticBounce.init({
+      container: '.elastic-container',
+      maxStretch: 0.15,
+      resistance: 0.3,
+      animationDuration: 300
+    });
+
+    let containerCount = 0;
+    let cardCount = 0;
+    let innerCardCount = 0;
+
+    // 添加新的滚动容器
+    function addContainer() {
+      containerCount++;
+      const container = document.createElement('div');
+      container.className = 'scroll-container elastic-container';
+      container.innerHTML = `
+        <div class="card">
+          <h3>动态容器 ${containerCount}</h3>
+          <p>这是一个动态添加的滚动容器。</p>
+          
+          <!-- 内部滚动容器 -->
+          <div class="inner-scroll">
+            <div class="inner-content">
+              <div class="inner-card">
+                <h4>内部滚动区域</h4>
+                <p>这是一个独立的滚动区域，有自己的弹性效果。</p>
+              </div>
+              <div class="inner-card">
+                <h4>内部内容</h4>
+                <p>尝试滚动这个区域，它有独立的弹性效果。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('dynamic-column').appendChild(container);
+    }
+
+    // 移除最后一个滚动容器
+    function removeContainer() {
+      const containers = document.getElementById('dynamic-column').getElementsByClassName('scroll-container');
+      if (containers.length > 0) {
+        containers[containers.length - 1].remove();
+      }
+    }
+
+    // 向所有外层容器添加卡片
+    function addCard() {
+      cardCount++;
+      const containers = document.getElementsByClassName('scroll-container');
+      Array.from(containers).forEach(container => {
+        if (!container.classList.contains('inner-scroll')) {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <h3>动态卡片 ${cardCount}</h3>
+            <p>这是一个动态添加的内容卡片。尝试滚动查看效果。</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          `;
+          container.appendChild(card);
+        }
+      });
+    }
+
+    // 向所有内部容器添加卡片
+    function addInnerCard() {
+      innerCardCount++;
+      const innerContainers = document.getElementsByClassName('inner-content');
+      Array.from(innerContainers).forEach(container => {
+        const card = document.createElement('div');
+        card.className = 'inner-card';
+        card.innerHTML = `
+          <h4>内部卡片 ${innerCardCount}</h4>
+          <p>这是动态添加的内部卡片。</p>
+          <p>测试内部滚动区域的弹性效果。</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // 切换弹性效果
+    function toggleElastic() {
+      const containers = document.getElementsByClassName('elastic-container');
+      Array.from(containers).forEach(container => {
+        if (container.getAttribute('data-elastic') === 'false') {
+          ElasticBounce.enableElastic(container);
+        } else {
+          ElasticBounce.disableElastic(container);
+        }
+      });
+    }
+
+    // 添加初始的动态容器
+    addContainer();
+  </script>
+</body>
+</html> 

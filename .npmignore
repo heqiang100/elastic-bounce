@@ -1,0 +1,39 @@
+# 源代码
+src/
+
+# 开发工具配置
+.eslintrc
+.prettierrc
+.editorconfig
+.gitignore
+.git
+
+# 测试文件
+__tests__/
+test/
+*.test.js
+*.spec.js
+jest.config.js
+
+# 示例和文档
+examples/
+docs/
+
+# 开发环境文件
+node_modules/
+.vscode/
+.idea/
+*.log
+.DS_Store
+
+# 构建配置
+rollup.config.js
+tsconfig.json
+babel.config.js
+
+# 其他
+*.map
+coverage/
+.github/
+.travis.yml
+.gitlab-ci.yml 

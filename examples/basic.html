@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elastic Bounce 基础示例</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;  /* 防止整个页面滚动 */
+      position: fixed;   /* 防止 iOS 回弹效果 */
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .page-container {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;  /* 创建新的层叠上下文 */
+    }
+
+    header {
+      height: 50px;
+      background: #3498db;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      flex-shrink: 0;
+      position: relative;  /* 确保在正确的层级 */
+      z-index: 1;
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;  /* iOS 流畅滚动 */
+      position: relative;  /* 创建新的层叠上下文 */
+      background: #f5f6fa;
+    }
+
+    .content-inner {
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      height: 50px;
+      background: #2c3e50;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;  /* 确保在正确的层级 */
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-container elastic-container">
+    <header>
+      <h1>Elastic Bounce Demo</h1>
+    </header>
+    <div class="content">
+      <div class="content-inner">
+        <div class="card">
+          <h2>特性 1</h2>
+          <p>这是一个基础的弹性滚动示例，向上或向下拖动内容查看效果。</p>
+        </div>
+        <!-- 生成多个卡片用于滚动 -->
+        <script>
+          for (let i = 2; i <= 20; i++) {
+            document.write(`
+              <div class="card">
+                <h2>特性 ${i}</h2>
+                <p>这是示例内容 ${i}，用于演示弹性滚动效果。尝试快速滚动到顶部或底部。</p>
+              </div>
+            `);
+          }
+        </script>
+      </div>
+    </div>
+    <footer>
+      <p>Elastic Bounce &copy; 2024</p>
+    </footer>
+  </div>
+
+  <script src="../dist/elastic-bounce.umd.min.js"></script>
+  <script>
+    // 初始化弹性滚动
+    ElasticBounce.init({
+      container: '.elastic-container',
+      maxStretch: 0.15,    // 最大拉伸比例
+      resistance: 0.3,     // 拉伸阻力
+      animationDuration: 300,  // 动画持续时间
+      animationFunction: 'ease-out',  // 动画函数
+      excludeSelectors: ['.no-elastic']  // 排除带有 no-elastic 类的元素
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,59 @@
+{
+  "name": "elastic-bounce",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "一个轻量级的移动端弹性滚动效果库",
+  "main": "dist/elastic-bounce.cjs.min.js",
+  "module": "dist/elastic-bounce.esm.min.js",
+  "browser": "dist/elastic-bounce.umd.min.js",
+  "unpkg": "dist/elastic-bounce.umd.min.js",
+  "jsdelivr": "dist/elastic-bounce.umd.min.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist/*.js",
+    "dist/types/*.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "rollup -c -w",
+    "build": "rollup -c --environment MINIFY:true",
+    "prepublishOnly": "npm run build",
+    "test": "jest",
+    "lint": "eslint src"
+  },
+  "keywords": [
+    "animation",
+    "elastic",
+    "bounce",
+    "scroll",
+    "mobile"
+  ],
+  "author": "xhq <912272823@qq.com>",
+  "homepage": "https://github.com/heqiang100/elastic-bounce",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heqiang100/elastic-bounce.git"
+  },
+  "bugs": {
+    "url": "https://github.com/heqiang100/elastic-bounce/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.22.20",
+    "@babel/preset-typescript": "^7.23.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@types/jest": "^29.5.5",
+    "eslint": "^8.51.0",
+    "jest": "^29.7.0",
+    "rollup": "^4.1.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2"
+  }
+} 
